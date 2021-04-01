@@ -6,7 +6,6 @@ times 512 - ($ - $$) db 0
 section .boot_code
 global _start
 _start:
-	xchg bx, bx
 	mov sp, 0x7000
 	push dx ;Reserve dl
 
@@ -18,13 +17,13 @@ _start:
 	call print_char
 	pop ax
 
-	;pop dx ;dl has value assigned by BIOS
+	pop dx ;dl has value assigned by BIOS
 	mov ah, 2 ;Read disk 
 	mov al, 1 ;Read 1 sector 
 	mov ch, 0 ;Read cylinder 0 
 	mov cl, 2 ;Read sector 2 
 	mov dh, 0 ;Read head 0 
-	mov bx, 0x7e00
+	mov bx, 0x7e0
 	mov es, bx
 	mov bx, 0
 	int 0x13
