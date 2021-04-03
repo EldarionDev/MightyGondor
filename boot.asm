@@ -10,13 +10,7 @@ _start:
 	push dx ;Reserve dl
 
 	call setup_print
-	push '!'
-	call print_char
-	pop ax
-	push 't'
-	call print_char
-	pop ax
-
+	
 	pop dx ;dl has value assigned by BIOS
 	mov ah, 2 ;Read disk 
 	mov al, 1 ;Read 1 sector 
@@ -28,12 +22,8 @@ _start:
 	mov bx, 0
 	int 0x13
 
-	lea bx, boot_string
-	push word [bx + 2]
-	xchg bx, bx
-	call print_char
-	;push boot_string
-	;call print_string
+	push boot_string
+	call print_string
 	jmp $
 
 %include "boot_routines/print.asm"

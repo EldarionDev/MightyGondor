@@ -6,27 +6,27 @@ setup_print:
 	ret
 
 print_char:
+	push bx
 	mov bx, sp
-	mov ax, [bx + 2]
+	mov ax, [bx + 4]
 	mov ah, 0x0e
 	int 0x10
+	pop bx
 	ret
 
 print_string:
-	mov dx, sp
-	mov bx, sp
-	mov bx, [bx + 2]
-	mov si, 0
-	
-	print_loop:
-	mov al, [bx + si]
-	cmp al, 0
-	je print_end
-	push ax
-	call print_char
-	add si, 1
-	jmp print_loop
-
-	print_end:
-	mov sp, dx
-	ret
+	mov bx, sp ;Mov param into bx for indexing
+	mov bx, [bx + 2] ;Mov address of string into bx
+	xor si, si ;Use si for indexing current char
+	xchg bx, bx
+	loop:
+		mov al, [bx + si]
+		cmp al, 0
+		je finished
+		push ax
+		xchg bx, bx
+		call print_char
+		add si, 1
+		jmp loop
+	finished:
+		ret
